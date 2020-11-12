@@ -9,7 +9,7 @@ endif()
 file(READ "imgui-ws.js" src_imgui-ws_js)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/common.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common.h @ONLY)
 
-add_library(imgui-ws SHARED
+add_library(imgui-ws
     imgui-ws.cpp
     compressor-xor-rle-per-draw-list.cpp
     compressor-xor-rle-per-draw-list-with-vtx-offset.cpp
@@ -17,11 +17,13 @@ add_library(imgui-ws SHARED
 
 target_include_directories(imgui-ws PUBLIC
     ../include
+ PRIVATE $<TARGET_PROPERTY:CONAN_PKG::incppect,INTERFACE_INCLUDE_DIRECTORIES>
+ PRIVATE $<TARGET_PROPERTY:CONAN_PKG::imgui,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 target_link_libraries(imgui-ws PRIVATE
-    imgui
-    incppect
+    CONAN_PKG::imgui
+    CONAN_PKG::incppect
     ${CMAKE_DL_LIBS}
     ${CMAKE_THREAD_LIBS_INIT}
     )
